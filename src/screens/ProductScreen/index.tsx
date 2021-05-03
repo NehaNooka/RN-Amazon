@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {useRoute} from '@react-navigation/native';
 import styles from './styles';
 import QuantitySelector from '../../components/QuantitySelector';
 import product from '../../data/product';
@@ -8,11 +9,16 @@ import Button from '../../components/Button';
 import ImageCarousel from '../../components/ImageCarousel';
 
 const ProductScreen = () => {
-  const [selectedOption, setSelectedOption] = useState(product.options ? product.options[0] : null);
+  const [selectedOption, setSelectedOption] = useState(
+    product.options ? product.options[0] : null,
+  );
   const [quantity, setQuantity] = useState(1);
-  
+
+  const route = useRoute();
+  console.log(route.params);
+
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       <Text style={styles.title}>{product.title}</Text>
 
       {/* Image carousel */}
@@ -21,7 +27,7 @@ const ProductScreen = () => {
       {/* Option selector */}
       <Picker
         selectedValue={selectedOption}
-        onValueChange={(itemValue) => setSelectedOption(itemValue)}>
+        onValueChange={itemValue => setSelectedOption(itemValue)}>
         {product.options.map(option => (
           <Picker.Item label={option} value={option} />
         ))}
@@ -29,9 +35,9 @@ const ProductScreen = () => {
 
       {/* Price */}
       <Text style={styles.price}>
-        from ${product.price}
+        from ₹{product.price}
         {product.oldPrice && (
-          <Text style={styles.oldPrice}> ${product.oldPrice}</Text>
+          <Text style={styles.oldPrice}> ₹{product.oldPrice}</Text>
         )}
       </Text>
 
@@ -47,15 +53,16 @@ const ProductScreen = () => {
         onPress={() => {
           console.warn('Add to cart');
         }}
-        containerStyles={{backgroundColor: '#e3c905'}}
+        containerStyles={{backgroundColor: '#e3c905',height:50}}
       />
       <Button
         text={'Buy Now'}
+        containerStyles={{height:50}}
         onPress={() => {
           console.warn('Buy now');
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
